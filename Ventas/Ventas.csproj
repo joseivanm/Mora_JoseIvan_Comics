@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows7.0</TargetFramework>
+		<!-- Cambiado a coincidir con Comics -->
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ComicADO\ComicADO.csproj" />
+	  <ProjectReference Include="..\Entidades\Entidades.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="Comics">
+	    <HintPath>..\Comics\obj\Debug\net8.0-windows\ref\Comics.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+</Project>
