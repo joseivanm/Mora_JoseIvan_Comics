@@ -82,19 +82,21 @@ namespace ComicWPF.ViewModels
         }
         public void ShowInsertForm()
         {
-            CurrentUserControl = new ComicForm(_comicRepository);
+            var comicForm = new ComicForm(_comicRepository);
+            // comicForm.DataContext = new ComicFormModel { Comic = selectedComic };
+            CurrentUserControl = comicForm;
         }
         public void ShowEditForm(ComicModel selectedComic)
         {
             var comicForm = new ComicForm(_comicRepository);
-            comicForm.DataContext = new ComicFormModel { Comic = selectedComic };
+           // comicForm.DataContext = new ComicFormModel { Comic = selectedComic };
             CurrentUserControl = comicForm;
         }
 
         public void ShowDeleteForm(ComicModel selectedComic)
         {
             var comicForm = new ComicForm(_comicRepository);
-            comicForm.DataContext = new ComicFormModel { Comic = selectedComic };
+            //comicForm.DataContext = new ComicFormModel { Comic = selectedComic };
             CurrentUserControl = comicForm;
         }
         public void LoadComicDetails(int comicId, int tiendaId)

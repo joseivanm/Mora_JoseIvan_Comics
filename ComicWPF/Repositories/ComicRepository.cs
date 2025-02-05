@@ -10,6 +10,7 @@ using System.Windows;
 using Entidades;
 using ComicWPF.Models;
 using ComicWPF.ViewModels;
+using ComicADO;
 
 namespace ComicWPF.Repositories
 {
@@ -24,30 +25,27 @@ namespace ComicWPF.Repositories
         {
             using (VentasADO ventasADO = new VentasADO())
             {
-                // Llamar al metodo que filtra por editorial y local
                 List<Comic> comics = ventasADO.ListarPorEditorialYLocal(editorialId.ToString(), localId);
 
                 if (comics == null || comics.Count == 0)
                 {
                     MessageBox.Show("No se encontraron cómics en la base de datos para los parámetros proporcionados.");
-                    return new List<Comic>(); // Retorna una lista vacía en vez de null
+                    return new List<Comic>();
                 }
 
                 List<Comic> comicsConStock = new List<Comic>();
 
                 foreach (var comic in comics)
                 {
-                    // Obtener el stock para el cómic actual
+
                     var stockComic = ventasADO.ListarPorComicId(comic);
 
-                    if (stockComic != null && stockComic.Cantidad > 0) // Verificar si hay stock
+                    if (stockComic != null && stockComic.Cantidad > 0) 
                     {
-                        comicsConStock.Add(comic); // Añadir a la lista si tiene stock > 0
+                        comicsConStock.Add(comic); 
                     }
                 }
 
-                // Mostrar detalles de los cómics con stock
-                StringBuilder sb = new StringBuilder("Cómmics con stock:\n");
 
 
                 return comicsConStock;
@@ -55,7 +53,25 @@ namespace ComicWPF.Repositories
         }
 
 
+        public void EditarStockComic(int editorial, int local, int metodoPago, int clienteId, int comicId,int empleadoId,int precioCompra,int cantidad, bool rbCliente)
+        {
 
+            try
+            { 
+               using (VentasADO ventasADO = new VentasADO())
+                {
+                    if (rbCliente) { ventasADO.EditarStockComic(comicId, editorial, local, precioCompra, cantidad, metodoPago, empleadoId); }
+                    else { ventasADO.EditarStockComic(comicId, editorial, local, precioCompra, cantidad, metodoPago, empleadoId, clienteId); }
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al insertar el comic: {ex.Message}");
+            }
+
+        }
         public Task<bool> EliminarComic(int comicId)
         {
             throw new NotImplementedException();

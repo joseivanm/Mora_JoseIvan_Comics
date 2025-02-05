@@ -41,7 +41,7 @@ namespace ComicWPF.Views
             var editorialRepository = new EditorialRepository();
             var comicRepository = new ComicRepository();
             var stockComicRepository = new StockComicRepository();
-            this.DataContext  = new ComicPageModel(medioDePagoRepository, clienteJIMRepository, editorialRepository, user, comicRepository, stockComicRepository);
+            this.DataContext  = new ComicPageModel();
         }
 
 
@@ -62,7 +62,8 @@ namespace ComicWPF.Views
         // Insertar un nuevo comic
         private void InsertButton_Click(object sender, RoutedEventArgs e)
         {
-            _viewModel.ShowInsertForm(); 
+            var viewModel = (ComicPageModel)this.DataContext;
+            viewModel.ShowInsertForm();
         }
 
 

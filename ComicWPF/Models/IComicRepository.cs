@@ -29,5 +29,6 @@ namespace ComicWPF.Models
         // Cargar todos los cómics sin detalles
         Task<List<ComicPageModel>> CargarComics();
         List<Comic> ListarComicsEditorialyLocal(int editorialId, int localId);
+        void EditarStockComic(int editorial, int local, int metodoPago, int clienteId, int comicId, int empleadoId, int precioCompra, int cantidad, bool rbCliente);
     }
 }

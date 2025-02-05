@@ -151,6 +151,7 @@ namespace ComicWPF.ViewModels
 
         public void LoadEditorialesPorEmpleado(string empleadoId)
         {
+            MessageBox.Show(empleadoId);
             int idEmpleado = Convert.ToInt32(empleadoId);
             var editoriales = _editorialRepository.ObtenerEditorialesPorEmpleado(idEmpleado);
 
