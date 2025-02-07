@@ -10,7 +10,11 @@ namespace ComicWPF.Repositories
     {
         public List<Editorial> ObtenerEditoriales()
         {
-            throw new NotImplementedException();
+            using (VentasADO ventasADO = new VentasADO())
+            {
+                List<Editorial> listaeditoriales = ventasADO.ListarEditoriales();
+                return listaeditoriales;
+            }
         }
 
         public List<Editorial> ObtenerEditorialesPorEmpleado(int empleadoId)
@@ -24,6 +28,14 @@ namespace ComicWPF.Repositories
                 var editorialesDeTienda = ventasADO.ListarEditorialesPorTienda(nombreLocal.LocalId);
 
                 return editorialesDeTienda;
+            }
+        }
+        public List<Editorial> ListarEditoriales()
+        {
+            using (VentasADO ventasADO = new VentasADO())
+            {
+                List<Editorial> listaeditoriales = ventasADO.ListarEditoriales();
+                return listaeditoriales;
             }
         }
     }

@@ -85,9 +85,16 @@ namespace ComicWPF.Views
         // Modificar el comic seleccionado
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
-            // Asegúrate de pasar el comic seleccionado
-            var selectedComic = (ComicModel)((DataGrid)sender).SelectedItem;
-            _viewModel.ShowEditForm(selectedComic);
+            var dataGrid = ComicsDataGrid;
+            var viewModel = (ComicPageModel)this.DataContext;
+            var selectedComicDisplay = (ComicDisplayModel)dataGrid.SelectedItem;
+            MessageBox.Show(selectedComicDisplay.ComicId.ToString());
+            if (selectedComicDisplay != null)
+            {
+                int comicId = selectedComicDisplay.ComicId;  // Usa solo el ComicId
+                viewModel.ShowEditForm(comicId);  // Pasa solo el ID
+                
+            }
         }
 
         // Eliminar el comic seleccionado

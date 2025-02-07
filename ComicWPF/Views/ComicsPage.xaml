@@ -9,8 +9,8 @@
     <Grid>
 
 
-        <!-- Primer DataGrid de Comics -->
-        <DataGrid IsReadOnly="True" 
+
+        <DataGrid x:Name="ComicsDataGrid" IsReadOnly="True" 
           ItemsSource="{Binding Comics}" 
           SelectionChanged="DataGrid_SelectionChanged" Margin="0,64,171,394">
 

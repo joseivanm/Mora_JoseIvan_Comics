@@ -18,6 +18,20 @@ namespace ComicWPF.ViewModels
         private readonly IEditorialRepository _editorialRepository;
         private readonly IComicRepository _comicRepository;
         private readonly IStockComicRepository _stockComicRepository;
+        private readonly IAutorRepository _autorRepository;
+
+        public bool edicion = false;
+        private string _campoCambiante;
+
+        public string CampoCambiante
+        {
+            get { return _campoCambiante; }
+            set
+            {
+                _campoCambiante = value;
+                OnPropertyChanged(nameof(CampoCambiante));
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private List<EditorialModel> _editoriales;
@@ -34,6 +48,17 @@ namespace ComicWPF.ViewModels
         public List<MedioDePago> MediosDePagoList { get; set; }
         public List<ClienteJimModel> ClientesList { get; set; }
         private List<ComicModel> _comicss;
+        public List<AutorModel> _autores;
+
+        public List<AutorModel> Autores
+        {
+            get { return _autores; }
+            set
+            {
+                _autores = value;
+                OnPropertyChanged(nameof(Autores));
+            }
+        }
 
         private ComicModel _comic;
         public ComicModel Comic
@@ -51,7 +76,7 @@ namespace ComicWPF.ViewModels
             set
             {
                 _comicss = value;
-                OnPropertyChanged(nameof(Comicss));  // Notificar el cambio
+                OnPropertyChanged(nameof(Comicss)); 
             }
         }
 
@@ -81,7 +106,51 @@ namespace ComicWPF.ViewModels
             LoadMediosDePago();
             LoadClientes();
             LoadEditorialesPorEmpleado();
+            CampoCambiante = "Cantidad";
             //LoadEditorialesPorEmpleado(user.Id);
+
+            Comic = new ComicModel();
+        }
+        public ComicFormModel(IMedioDePagoRepository medioDePagoRepository,
+                                   IClienteJIMRepository clienteJIMRepository,
+                                   IEditorialRepository editorialRepository,
+                                   UserModel user,
+                                   int comicId,
+                                   IStockComicRepository stockComicRepository)
+        {
+            _medioDePagoRepository = medioDePagoRepository;
+            _clienteJIMRepository = clienteJIMRepository;
+            _editorialRepository = editorialRepository;
+            _comicRepository = new ComicRepository();
+            _stockComicRepository = stockComicRepository;
+            _autorRepository = new AutorRepository();
+            //LoadMediosDePago();
+            //LoadClientes();
+            //LoadEditorialesPorEmpleado();
+            //LoadEditorialesPorEmpleado(user.Id);
+            LoadAutores();
+            LoadEditoriales();
+            LoadComic(comicId);
+            edicion = true;
+            CampoCambiante = "Comic Nombre";
+
+            Comic = new ComicModel();
+        }
+        public ComicFormModel(int comicId)
+        {
+            
+            _comicRepository = new ComicRepository();
+
+            _autorRepository = new AutorRepository();
+            //LoadMediosDePago();
+            //LoadClientes();
+            //LoadEditorialesPorEmpleado();
+            //LoadEditorialesPorEmpleado(user.Id);
+            LoadAutores();
+            LoadEditoriales();
+            LoadComic(comicId);
+            edicion = true;
+            CampoCambiante = "Comic Nombre";
 
             Comic = new ComicModel();
         }
@@ -99,6 +168,52 @@ namespace ComicWPF.ViewModels
             Comic = new ComicModel();
 
         }
+        public void LoadAutores()
+        {
+
+
+            var autores = _autorRepository.ObtenerAutores();
+
+            if (autores == null || !autores.Any())
+            {
+                MessageBox.Show("No se encontraron autores .", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            Autores = autores.Select(e => new AutorModel
+            {
+
+                AutorId = e.AutorId,
+                Nombre = e.Nombre,
+                Apellido = e.Apellido,
+                Pais = e.Pais,
+
+            }).ToList();
+
+        }
+        public void LoadComic(int comicId)
+        {
+            var comic = _comicRepository.obtenerComic(comicId);  // Obtener el cómic desde la base de datos
+
+            if (comic != null)
+            {
+                // Asignar los valores a ComicModel
+                Comic = new ComicModel
+                {
+                    ComicId = comic.ComicId,
+                    Nombre = comic.Nombre,
+                    Autor = comic.Autor?.Nombre,
+                    AutorId = comic.Autor?.AutorId ?? 0,  // Asegúrate de que AutorId tiene un valor
+                    Editorial = comic.Editorial?.Nombre,
+                    EditorialId = comic.Editorial?.EditorialId ?? 0  // Asegúrate de que EditorialId tiene un valor
+                   
+                };
+
+                // Verificación de los valores para asegurarte de que se asignaron correctamente
+                MessageBox.Show($"Comic: {Comic.Nombre}, Autor: {Comic.AutorId}, Editorial: {Comic.EditorialId}");
+            }
+        }
+
 
 
         public void SaveComic()
@@ -177,6 +292,24 @@ namespace ComicWPF.ViewModels
             }).ToList();
 
         }
+        public void LoadEditoriales()
+        {
+
+            var editoriales = _editorialRepository.ObtenerEditoriales();
+
+            if (editoriales == null || !editoriales.Any())
+            {
+                MessageBox.Show("No se encontraron editoriales.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            Editoriales = editoriales.Select(e => new EditorialModel
+            {
+                EditorialId = e.EditorialId,
+                Nombre = e.Nombre
+            }).ToList();
+
+        }
         public void btnCreateComic_Click(int editorial, int local, int metodoPago, int clienteId, int comicId,int empleadoId, int precioCompra, int cantidad, bool rbCliente)
         {
 
@@ -228,6 +361,20 @@ namespace ComicWPF.ViewModels
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        internal void btnEditComic_Click(int comicId, string nombreComic, int editorialId, int autor)
+        {
+            try
+            {
+                _comicRepository.EditarComic(comicId, nombreComic, editorialId, autor);
+
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al insertar el comic: {ex.Message}");
+            }
         }
     }
 }

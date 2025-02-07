@@ -186,5 +186,43 @@ namespace ComicWPF.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public Comic obtenerComic(int idComic)
+        {
+            using (VentasADO ventasADO = new VentasADO())
+            {
+                string comicId = Convert.ToString(idComic);
+                try
+                {
+                    var comics = ventasADO.obtenerDetallesComic(comicId);
+
+                    return comics;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al cargar los datos de cómics2: {ex.Message}");
+                    return null;
+                }
+            }
+        }
+
+        public void EditarComic(int idComic, string nombreComic, int editorialId, int autor)
+        {
+            using (VentasADO ventasADO = new VentasADO())
+            {
+
+                try
+                {
+                    ventasADO.EditarComic(idComic, nombreComic, editorialId, autor);
+
+                    
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al cargar los datos de cómics2: {ex.Message}");
+                   
+                }
+            }
+        }
     }
 }

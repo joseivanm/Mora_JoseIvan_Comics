@@ -375,6 +375,38 @@ namespace Ventas
                 }
             }
         }
+        public void EditarComic(int comicId, string nombreComic, int editorialId, int autor)
+        {
+            using (ComicsADO comicADO = new ComicsADO())
+            {
+                try
+                {
+                    string idcomic = Convert.ToString(comicId);
+                    Comic comic = obtenerDetallesComic(idcomic);
+
+                    if (comic != null)
+                    {
+ 
+                        comic.Nombre = nombreComic;
+                        comic.EditorialId = editorialId;
+                        comic.AutorId = autor;
+
+                        
+                        comicADO.Actualizar(comic);
+                    }
+                    else
+                    {
+                        MessageBox.Show("El cómic no se encontró.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al actualizar el cómic: {ex.Message}");
+                }
+            }
+        }
+
+
 
 
         public List <Comic> CargarComics()

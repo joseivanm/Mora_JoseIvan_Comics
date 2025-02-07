@@ -14,21 +14,22 @@ namespace ComicWPF.Models
     {
         Task<List<ComicPageModel>> CargarComicsConDetalles();
 
-        // Buscar cómics por nombre, autor o editorial
+    
         Task<List<ComicPageModel>> BuscarComics(string searchTerm);
 
-        // Insertar un nuevo cómic
+    
         Task<bool> InsertarComic(ComicModel comicViewModel);
 
-        // Modificar un cómic existente
         Task<bool> ModificarComic(ComicModel comicViewModel);
 
-        // Eliminar un cómic por su ID
+ 
         Task<bool> EliminarComic(int comicId);
 
-        // Cargar todos los cómics sin detalles
+ 
         Task<List<ComicPageModel>> CargarComics();
         List<Comic> ListarComicsEditorialyLocal(int editorialId, int localId);
+        Comic obtenerComic(int comicId);
         void EditarStockComic(int editorial, int local, int metodoPago, int clienteId, int comicId, int empleadoId, int precioCompra, int cantidad, bool rbCliente);
+        void EditarComic(int comicId, string nombreComic, int editorialId, int autor);
     }
 }

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ComicWPF.Views.ComicForm"
+﻿<UserControl x:Class="ComicWPF.Views.ComicFormEditModel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModels="clr-namespace:ComicWPF.ViewModels"
@@ -12,44 +12,39 @@
 
         <StackPanel Orientation="Horizontal" Margin="0,5">
             <TextBlock Text="Editorial: " Width="100" VerticalAlignment="Center"/>
-            <ComboBox x:Name="cmbEditorial" Width="200"
-          ItemsSource="{Binding Editoriales}"
-          DisplayMemberPath="Nombre"
-          SelectedValuePath="EditorialId"
-          SelectedValue="{Binding Comic.EditorialId}" />
+            <ComboBox x:Name="cmbEditorial" Width="200" ItemsSource="{Binding Editoriales}" DisplayMemberPath="Nombre" SelectedValuePath="EditorialId" />
 
-            <TextBlock Text="Medio Pago:" Width="100" Margin="10,0,0,0" VerticalAlignment="Center"/>
-            <ComboBox x:Name="cmbMetodoPagoAdd" Width="160" ItemsSource="{Binding MediosDePagoList}" DisplayMemberPath="NombreCorto" SelectedValuePath="MedioDePagoId" />
+            <TextBlock Text="Autor:" Width="100" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <ComboBox x:Name="cmbAutor" Width="160" ItemsSource="{Binding Autores}" DisplayMemberPath="Nombre" SelectedValuePath="AutorId" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="0,5">
             <TextBlock Text="Nombre: " Width="100" VerticalAlignment="Center"/>
-            <ComboBox x:Name="ComicNameTextBox" Width="200" IsEditable="True" ItemsSource="{Binding Comicss}"  DisplayMemberPath="Nombre" SelectedValuePath="ComicId" SelectedValue="{Binding Comic.ComicId}"   />
-            <TextBlock Text="{Binding CampoCambiante}" Width="100" Margin="10,0,0,0" VerticalAlignment="Center"/>
-            <TextBox x:Name="texboxCantidad" Width="161" Text="{Binding Comic.Nombre}"/>
+            <TextBox x:Name="ComicNameTextBox" Width="200" Text="{Binding SelectedComic.Nombre}" IsReadOnly="True"/>
+
+            <TextBlock Text="Cantidad: " Width="100" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <TextBox x:Name="texboxCantidad" Width="161" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="0,5">
             <TextBlock Text="Precio Compra: " Width="100" VerticalAlignment="Center"/>
             <TextBox x:Name="BuyPriceTextBox" Width="200" />
-            <TextBlock Text="Autores:" Width="100" Margin="10,0,0,0" VerticalAlignment="Center"/>
-            <ComboBox x:Name="cmbAutores" Width="160" ItemsSource="{Binding Autores}" DisplayMemberPath="Nombre" SelectedValuePath="AutorId" SelectedValue="{Binding Comic.AutorId}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,5">
-            <Button Content="Listar Comics Editorial" Margin="25,0,0,0"  Width="132" Click="btnLoadComics_Click"/>
+            <Button Content="Listar Comics Editorial" Margin="25,0,0,0"  Width="132" />
             <RadioButton x:Name="rcCliente"  Margin="25,0,0,0" Content="Compra cliente" Height="14" Width="120"/>
             <TextBlock Text="Cliente: " Width="50" Margin="10,0,0,0" VerticalAlignment="Center"/>
             <ComboBox x:Name="ClientNameTextBox" Width="182"  ItemsSource="{Binding ClientesList}" DisplayMemberPath="Nombre" SelectedValuePath="ClienteID" />
         </StackPanel>
 
- 
+
 
         <!-- Mensaje de Resultado -->
         <TextBlock Text="{Binding OperationMessage}" Foreground="Red" Margin="0,10"/>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="20">
             <Button Content="Guardar" Width="100" Click="SaveButton_Click"/>
-            <Button Content="Cancelar" Width="100" Margin="10,0" Click="CancelButton_Click"/>
+            <Button Content="Cancelar" Width="100" Margin="10,0"/>
         </StackPanel>
     </StackPanel>
 </UserControl>
