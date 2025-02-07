@@ -456,6 +456,27 @@ namespace Ventas
             }
         }
 
+        public StockComic ListarPorIdComic(int comic)
+        {
+            if (comic == null)
+            {
+                MessageBox.Show("El comic no puede ser nulo.");
+                return null;
+            }
+            try
+            {
+                using (StockComicADO stockADO = new StockComicADO())
+                {
+                    return stockADO.ListarPorComicId(comic);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener el comic: {ex.Message}");
+                return null;
+            }
+        }
+
         public StockComic ListarPorComicId(Comic comic)
         {
             if (comic == null)

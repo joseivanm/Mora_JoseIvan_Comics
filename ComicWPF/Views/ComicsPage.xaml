@@ -18,46 +18,46 @@
 
 
         <StackPanel Margin="10,189,10,10">
-            <TextBlock Text="Detalles del Comic Seleccionado" FontSize="18" Foreground="black" Margin="0,0,0,10"/>
+            <TextBlock Text="Detalles del Comic Seleccionado" FontSize="18" Foreground="#FFE2E2E2" Margin="0,0,0,10"/>
 
         
             <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="Nombre: " Width="100" VerticalAlignment="Center"/>
+                <TextBlock Text="Nombre: " Width="100" VerticalAlignment="Center" Foreground="#FFE2E2E2"/>
                 <TextBox x:Name="ComicNameTextBox" Width="300" IsReadOnly="True" Text="{Binding SelectedComic.Nombre}" />
             </StackPanel>
 
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="Autor: " Width="100" VerticalAlignment="Center"/>
+                <TextBlock Text="Autor: " Width="100" VerticalAlignment="Center" Foreground="#FFE2E2E2"/>
                 <TextBox x:Name="AuthorNameTextBox" Width="300" IsReadOnly="True" Text="{Binding SelectedComic.Autor}" />
             </StackPanel>
 
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="Editorial: " Width="100" VerticalAlignment="Center"/>
+                <TextBlock Text="Editorial: " Width="100" VerticalAlignment="Center" Foreground="#FFE2E2E2"/>
                 <TextBox x:Name="PublisherNameTextBox" Width="300" Margin="0,5" IsReadOnly="True" Text="{Binding SelectedComic.Editorial}" />
             </StackPanel>
 
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="Precio Compra: " Width="100" VerticalAlignment="Center"/>
+                <TextBlock Text="Precio Compra: " Width="100" VerticalAlignment="Center" Foreground="#FFE2E2E2"/>
                 <TextBox x:Name="BuyPriceTextBox" Width="300" Margin="0,5" IsReadOnly="True" Text="{Binding SelectedComic.PrecioCompra}" />
             </StackPanel>
 
  
             <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="Precio Venta: " Width="100" VerticalAlignment="Center"/>
+                <TextBlock Text="Precio Venta: " Width="100" VerticalAlignment="Center" Foreground="#FFE2E2E2"/>
                 <TextBox x:Name="SalePriceTextBox" Width="300" Margin="0,5" IsReadOnly="True" Text="{Binding SelectedComic.PrecioVenta}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="Stock Tienda Actual: " Width="137" VerticalAlignment="Center"/>
+                <TextBlock Text="Stock Tienda Actual: " Width="137" VerticalAlignment="Center" Foreground="#FFE2E2E2"/>
                 <TextBox x:Name="StockTiendaActual" Width="292" Margin="0,5" IsReadOnly="True" Text="{Binding StockTiendaActual.Cantidad}" />
             </StackPanel>
 
   
             <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="Stock en Otras Tiendas: " Width="138" VerticalAlignment="Center"/>
+                <TextBlock Text="Stock en Otras Tiendas: " Width="138" VerticalAlignment="Center" Foreground="#FFE2E2E2"/>
                 <ComboBox  x:Name="OtherStoresStockListBox" Width="289" Margin="0,05" Height="23" ItemsSource="{Binding StockOtrasTiendas}" >
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -84,6 +84,6 @@
         <ContentControl Content="{Binding CurrentUserControl}" Margin="10,189,10,10" />
         <TextBox x:Name="SearchTextBox" HorizontalAlignment="Left" Margin="491,166,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"                     TextChanged="SearchTextBox_TextChanged"
                     Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"/>
-        <Label Content="Filtro" HorizontalAlignment="Left" Margin="507,137,0,0" VerticalAlignment="Top"/>
+        <Label Content="Filtro" HorizontalAlignment="Left" Margin="507,137,0,0" VerticalAlignment="Top" Foreground="#FFE2E2E2"/>
     </Grid>
 </Page>

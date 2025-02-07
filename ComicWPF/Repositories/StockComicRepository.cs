@@ -17,7 +17,7 @@ namespace ComicWPF.Repositories
             using (VentasADO ventasADO = new VentasADO())
             {
 
-                    // Obtener el stock para el cómic actual
+                    
                     var stockComic = ventasADO.ListarPorComicId(comic);
                 return stockComic;
 
@@ -29,6 +29,24 @@ namespace ComicWPF.Repositories
         public object ListarPorComicId(ComicModel comicSelected)
         {
             throw new NotImplementedException();
+        }
+        public StockComic ListarPorComicId(int comic)
+        {
+            using (VentasADO ventasADO = new VentasADO())
+            {
+
+                try
+                {
+                    var stockComic= ventasADO.ListarPorIdComic(comic);
+                    return stockComic;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al cargar los datos de cómics2: {ex.Message}");
+                    return null;
+
+                }
+            }
         }
     }
 }

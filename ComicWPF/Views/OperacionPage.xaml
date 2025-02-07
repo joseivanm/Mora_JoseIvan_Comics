@@ -10,57 +10,33 @@
       Title="OperacionPage">
 
     <Grid Background="#FFF1F1F1">
-        <RadioButton x:Name="rbCompra" Content="Compra" HorizontalAlignment="Left" Margin="38,17,0,0" VerticalAlignment="Top"/>
-        <RadioButton x:Name="rbVenta" Content="Venta" HorizontalAlignment="Left" Margin="126,17,0,0" VerticalAlignment="Top"/>
-        <Label Content="Editorial" HorizontalAlignment="Left" Margin="324,65,0,0" VerticalAlignment="Top" Height="25" Width="58"/>
-        <TextBox x:Name="texboxCantidad" HorizontalAlignment="Left" Margin="392,17,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="123" Height="16"/>
-        <Label Content="Cantidad:" HorizontalAlignment="Left" Margin="322,13,0,0" VerticalAlignment="Top" Height="23" Width="59"/>
-        <TextBox x:Name="txtEmpleadoNif" HorizontalAlignment="Left" Margin="624,16,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="123" Height="16" IsEnabled="False"/>
-        <Label Content="Tienda:" HorizontalAlignment="Left" Margin="574,11,0,0" VerticalAlignment="Top" Height="23" Width="50"/>
-        <Label Content="Nombre:" HorizontalAlignment="Left" Margin="324,37,0,0" VerticalAlignment="Top" Height="24" Width="58"/>
-        <Label Content="Metodo Pago:" HorizontalAlignment="Left" Margin="537,36,0,0" VerticalAlignment="Top" Height="28" Width="87"/>
-        <TextBox x:Name="txtPrecioCompra" HorizontalAlignment="Left" Margin="624,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="123" Height="17"/>
-        <Label Content="Precio Compra:" HorizontalAlignment="Left" Margin="530,64,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.658,-0.693" Height="25" Width="89"/>
-        <Label Content="Cliente" HorizontalAlignment="Left" Margin="580,93,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.658,-0.693" Height="24" Width="39"/>
-        <RadioButton x:Name="rcCliente" Content="RadioButton" HorizontalAlignment="Left" Margin="624,99,0,0" VerticalAlignment="Top" Height="14" Width="88"/>
         <Label Content="Cliente" HorizontalAlignment="Left" Margin="29,45,0,0" VerticalAlignment="Top" Height="26"/>
         <ComboBox x:Name="cmbClientes" HorizontalAlignment="Left" Margin="76,47,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{Binding ClientesList}" DisplayMemberPath="Nombre"/>
-        <Button x:Name="btnAddClientes" Content="Añadir Cliente" HorizontalAlignment="Left" Margin="97,78,0,0" VerticalAlignment="Top" Width="84"/>
-        <Label Content="Empleado" HorizontalAlignment="Left" Margin="186,89,0,0" VerticalAlignment="Top" Height="26"/>
-        <TextBox x:Name="txtEmpleado" HorizontalAlignment="Left" Margin="249,93,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" IsEnabled="False"/>
-        <Button x:Name="btnLoadComics" Content="Cargar Comics" HorizontalAlignment="Left" Margin="245,188,0,0" VerticalAlignment="Top" Width="85" Click="btnLoadComics_Click"/>
+        <Button x:Name="btnAddClientes" Content="Añadir Cliente" HorizontalAlignment="Left" Margin="246,51,0,0" VerticalAlignment="Top" Width="84"/>
+        <Label Content="Empleado" HorizontalAlignment="Left" Margin="386,49,0,0" VerticalAlignment="Top" Height="26"/>
+        <TextBox x:Name="txtEmpleado" HorizontalAlignment="Left" Margin="449,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" IsEnabled="False"/>
+        <Button x:Name="btnLoadComics" Content="Cargar Comics" HorizontalAlignment="Left" Margin="236,189,0,0" VerticalAlignment="Top" Width="85" Click="btnLoadComics_Click"/>
 
-        <ComboBox x:Name="cmbComics" HorizontalAlignment="Left"  Margin="397,189,0,0" VerticalAlignment="Top" Width="120"  ItemsSource="{Binding Comicss}"  DisplayMemberPath="Nombre" SelectedValuePath="comidId" />
-        <ComboBox x:Name="cmbEditorial" HorizontalAlignment="Left" Margin="108,188,0,0" VerticalAlignment="Top" Width="120"  ItemsSource="{Binding Editoriales}" DisplayMemberPath="Nombre" SelectedValuePath="EditorialId"/>
-        <Button x:Name="btnAddComic" Content="Añadir" HorizontalAlignment="Left" Margin="530,190,0,0" VerticalAlignment="Top" Click="btnAddComic_Click"/>
+        <ComboBox x:Name="cmbComics" HorizontalAlignment="Left"  Margin="386,190,0,0" VerticalAlignment="Top" Width="120"  ItemsSource="{Binding Comicss}"  DisplayMemberPath="Nombre" SelectedValuePath="comidId" />
+        <ComboBox x:Name="cmbEditorial" HorizontalAlignment="Left" Margin="99,189,0,0" VerticalAlignment="Top" Width="120"  ItemsSource="{Binding Editoriales}" DisplayMemberPath="Nombre" SelectedValuePath="EditorialId"/>
+        <Button x:Name="btnAddComic" Content="Añadir" HorizontalAlignment="Left" Margin="519,191,0,0" VerticalAlignment="Top" Click="btnAddComic_Click"/>
 
-        <DataGrid x:Name="dgvOperacion" HorizontalAlignment="Left" VerticalAlignment="Top" Width="552" Height="176" Margin="22,218,0,0">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Cómic" Binding="{Binding Nombre}" />
-                <DataGridTextColumn Header="ComicId" Binding="{Binding ComicId}" />
-                <DataGridTextColumn Header="Cantidad" Binding="{Binding Cantidad}" />
-                <DataGridTextColumn Header="Precio" Binding="{Binding PrecioVenta}" />
-                <DataGridTextColumn Header="Descuento" Binding="{Binding Descuento}" />
-                <DataGridTextColumn Header="Subtotal" Binding="{Binding Subtotal}" />
-                <DataGridTextColumn Header="Stock" Binding="{Binding Stock}" />
-            </DataGrid.Columns>
+        <DataGrid x:Name="dgvOperacion" HorizontalAlignment="Left" VerticalAlignment="Top" Width="435" Height="176" Margin="22,218,0,0 " ItemsSource="{Binding ComicsOrder}" IsEnabled="False">
+            
         </DataGrid>
         <Button Content="Button" HorizontalAlignment="Left" Margin="46,416,0,0" VerticalAlignment="Top"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="628,416,0,0" VerticalAlignment="Top"/>
-        <Label Content="Metodo de pago" HorizontalAlignment="Left" Margin="668,188,0,0" VerticalAlignment="Top"/>
-        <Label Content="Totales" HorizontalAlignment="Left" Margin="649,243,0,0" VerticalAlignment="Top"/>
-        <Label Content="Subtotal:" HorizontalAlignment="Left" Margin="605,274,0,0" VerticalAlignment="Top"/>
-        <Label Content="IVA (21%):" HorizontalAlignment="Left" Margin="600,305,0,0" VerticalAlignment="Top" Width="68"/>
-        <Label Content="Total:" HorizontalAlignment="Left" Margin="616,336,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cmbMetodoPago" HorizontalAlignment="Left" Margin="659,218,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{Binding MediosDePagoList}" DisplayMemberPath="NombreCorto"/>
-        <TextBox x:Name="txtSubtotal" HorizontalAlignment="Left" Margin="659,278,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18"/>
-        <TextBox x:Name="txtIVA" HorizontalAlignment="Left" Margin="659,309,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18"/>
-        <TextBox x:Name="txtTotal" HorizontalAlignment="Left" Margin="659,340,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18"/>
-        <TextBox x:Name="cmbNombreComicAdd" HorizontalAlignment="Left" Margin="392,39,0,0" VerticalAlignment="Top" Width="120"/>
-        <ComboBox x:Name="cmbEditoriales" HorizontalAlignment="Left" Margin="392,69,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{Binding Editoriales}" DisplayMemberPath="Nombre" SelectedValuePath="EditorialId"/>
-        <ComboBox x:Name="cmbMetodoPagoAdd" HorizontalAlignment="Left" Margin="624,38,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{Binding MediosDePagoList}" DisplayMemberPath="NombreCorto"/>
-        <Label Content="Editorial" HorizontalAlignment="Left" Margin="34,187,0,0" VerticalAlignment="Top" Height="26"/>
-        <Label Content="Comics" HorizontalAlignment="Left" Margin="344,187,0,0" VerticalAlignment="Top" Height="26"/>
+        <Button x:Name="buttonVenta" Content="Completar Venta" HorizontalAlignment="Left" Margin="538,406,0,0" VerticalAlignment="Top" Click="buttonVenta_Click"/>
+        <Label Content="Metodo de pago" HorizontalAlignment="Left" Margin="557,224,0,0" VerticalAlignment="Top"/>
+        <Label Content="Totales" HorizontalAlignment="Left" Margin="538,279,0,0" VerticalAlignment="Top"/>
+        <Label Content="Subtotal:" HorizontalAlignment="Left" Margin="494,310,0,0" VerticalAlignment="Top"/>
+        <Label Content="IVA (21%):" HorizontalAlignment="Left" Margin="489,341,0,0" VerticalAlignment="Top" Width="68"/>
+        <Label Content="Total:" HorizontalAlignment="Left" Margin="505,372,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="cmbMetodoPago" HorizontalAlignment="Left" Margin="548,254,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{Binding MediosDePagoList}" DisplayMemberPath="NombreCorto"/>
+        <TextBox x:Name="txtSubtotal" HorizontalAlignment="Left" Margin="548,314,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" Text="{Binding Subtotal}" IsEnabled="False"/>
+        <TextBox x:Name="txtIVA" HorizontalAlignment="Left" Margin="548,345,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" Text="{Binding IVA}" IsEnabled="False"/>
+        <TextBox x:Name="txtTotal" HorizontalAlignment="Left" Margin="548,376,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" Text="{Binding Total}" IsEnabled="False"/>
+        <Label Content="Editorial" HorizontalAlignment="Left" Margin="25,188,0,0" VerticalAlignment="Top" Height="26"/>
+        <Label Content="Comics" HorizontalAlignment="Left" Margin="335,188,0,0" VerticalAlignment="Top" Height="26"/>
 
     </Grid>
 </Page>

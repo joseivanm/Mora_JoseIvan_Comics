@@ -53,7 +53,7 @@ namespace ComicWPF.Views
                     {
                         Title = venta.Key + " " + porcentajeAjustado + "%",
                         Values = new ChartValues<double> { porcentaje },
-                        Stroke = System.Windows.Media.Brushes.HotPink // O cualquier otro color que desees
+                        Stroke = System.Windows.Media.Brushes.HotPink 
                     });
                 }
 

@@ -65,7 +65,7 @@ namespace ComicWPF.ViewModels
             set
             {
                 _comicss = value;
-                OnPropertyChanged(nameof(Comicss));  // Notificar el cambio
+                OnPropertyChanged(nameof(Comicss));  
             }
         }
 
@@ -98,7 +98,7 @@ namespace ComicWPF.ViewModels
             LoadEditoriales();
             LoadAutores();
             MessageBox.Show("hola");
-            //LoadEditorialesPorEmpleado(user.Id);
+ 
 
             Comic = new ComicModel();
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entidades;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace ComicWPF.Models
 {
     public interface IStockComicRepository
     {
-        object ListarPorComicId(ComicModel comicSelected);
+       StockComic ListarPorComicId(int comicId);
     }
 }

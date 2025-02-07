@@ -9,7 +9,7 @@ public class OperacionModel : INotifyPropertyChanged
     public int ComicId { get; set; }
     public string Nombre { get; set; }
     public decimal PrecioVenta { get; set; }
-    public decimal Descuento { get; set; }
+    // public decimal Descuento { get; set; }
 
     public int Cantidad
     {
@@ -20,7 +20,7 @@ public class OperacionModel : INotifyPropertyChanged
             {
                 _cantidad = value;
                 OnPropertyChanged(nameof(Cantidad));
-                RecalcularSubtotal();
+                
             }
         }
     }
@@ -58,8 +58,4 @@ public class OperacionModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
-    private void RecalcularSubtotal()
-    {
-        Subtotal = (Cantidad * PrecioVenta) - ((Cantidad * PrecioVenta) * (Descuento / 100));
-    }
 }

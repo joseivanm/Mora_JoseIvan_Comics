@@ -6,6 +6,7 @@ using Entidades;
 using System.Windows.Controls;
 using ComicWPF.Repositories;
 using ComicADO;
+using Microsoft.VisualBasic.ApplicationServices;
 
 
 namespace ComicWPF.Views
@@ -25,7 +26,6 @@ namespace ComicWPF.Views
             userRepository = new UserRepository();
             var user = userRepository.GetByUsername(Thread.CurrentPrincipal.Identity.Name);
 
-            // Crea las instancias de los repositorios
             var medioDePagoRepository = new MedioDePagoRepository();
             var clienteJIMRepository = new ClienteJIMRepository();
             var editorialRepository = new EditorialRepository();
@@ -63,9 +63,9 @@ namespace ComicWPF.Views
             model.ListarComicsEditorialyLocal(editorialId, localId);
         }
 
-        // Método para el botón Guardar (Insertar o Modificar cómic)
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            var user = userRepository.GetByUsername(Thread.CurrentPrincipal.Identity.Name);
             if (!edicion)
             {
                 var model = (ComicFormModel)this.DataContext;
@@ -73,7 +73,7 @@ namespace ComicWPF.Views
                 int metodoPago = (int)cmbMetodoPagoAdd.SelectedValue;
                 int clientId = (int)ClientNameTextBox.SelectedValue;
                 int localId = 1; // TO-DO NEED CHANGE
-                int empleadoId = 1; //CHANGE
+                int empleadoId = Convert.ToInt32(user.Id);
                 int precioCompra = 0;
                 int cantidad = 0;
                 bool rbCliente = false;
@@ -116,17 +116,23 @@ namespace ComicWPF.Views
 
         }
 
-        // Método para el botón Cancelar
+
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            // Puedes realizar cualquier acción de cancelación, como limpiar el formulario o cerrar el UserControl
             _viewModel.OperationMessage = "Operación cancelada.";
+            var parent = this.Parent as Panel; 
+
+
+            if (parent != null)
+            {
+                parent.Children.Remove(this);
+            }
         }
 
-        // Método para el botón Eliminar (si es necesario)
+
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            // Confirmación de eliminación
+
             var confirmResult = MessageBox.Show("¿Estás seguro de que quieres eliminar este cómic?", "Confirmar Eliminación", MessageBoxButton.YesNo);
             if (confirmResult == MessageBoxResult.Yes)
             {

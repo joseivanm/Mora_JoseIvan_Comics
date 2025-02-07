@@ -35,7 +35,7 @@ namespace ComicWPF.Views
             userRepository = new UserRepository();
             var user = userRepository.GetByUsername(Thread.CurrentPrincipal.Identity.Name);
 
-            // Crea las instancias de los repositorios
+  
             var medioDePagoRepository = new MedioDePagoRepository();
             var clienteJIMRepository = new ClienteJIMRepository();
             var editorialRepository = new EditorialRepository();
@@ -47,19 +47,19 @@ namespace ComicWPF.Views
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var viewModel = (ComicPageModel)this.DataContext; // Obtenemos el modelo de vista
-            var searchTerm = SearchTextBox.Text; // Obtén el texto de búsqueda
-            viewModel.FilterComics(searchTerm); // Llamamos al método de filtrado
+            var viewModel = (ComicPageModel)this.DataContext; 
+            var searchTerm = SearchTextBox.Text; 
+            viewModel.FilterComics(searchTerm); 
         }
 
 
-        // Al seleccionar un comic del DataGrid, muestra los detalles
+
         private void ComicsDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
            
         }
 
-        // Insertar un nuevo comic
+
         private void InsertButton_Click(object sender, RoutedEventArgs e)
         {
             var viewModel = (ComicPageModel)this.DataContext;
@@ -82,22 +82,20 @@ namespace ComicWPF.Views
 
 
 
-        // Modificar el comic seleccionado
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
             var dataGrid = ComicsDataGrid;
             var viewModel = (ComicPageModel)this.DataContext;
             var selectedComicDisplay = (ComicDisplayModel)dataGrid.SelectedItem;
-            MessageBox.Show(selectedComicDisplay.ComicId.ToString());
             if (selectedComicDisplay != null)
             {
-                int comicId = selectedComicDisplay.ComicId;  // Usa solo el ComicId
-                viewModel.ShowEditForm(comicId);  // Pasa solo el ID
+                int comicId = selectedComicDisplay.ComicId;
+                viewModel.ShowEditForm(comicId);  
                 
             }
         }
 
-        // Eliminar el comic seleccionado
+ 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             var selectedComic = (ComicModel)((DataGrid)sender).SelectedItem;
@@ -112,17 +110,14 @@ namespace ComicWPF.Views
 
             if (comicModel != null)
             {
-                // Esperamos a que se carguen los cómics de manera asincrónica
 
-                // Asignamos los cómics cargados al DataGrid
-               //  ComicsDataGrid.ItemsSource = comicModel.Comics; // Asignamos Comics, no el método LoadComics
                
             }
         }
 
 
 
-        // Evento para el botón de búsqueda
+ 
 
 
     }

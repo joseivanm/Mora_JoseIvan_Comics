@@ -142,10 +142,6 @@ namespace ComicWPF.ViewModels
             _comicRepository = new ComicRepository();
 
             _autorRepository = new AutorRepository();
-            //LoadMediosDePago();
-            //LoadClientes();
-            //LoadEditorialesPorEmpleado();
-            //LoadEditorialesPorEmpleado(user.Id);
             LoadAutores();
             LoadEditoriales();
             LoadComic(comicId);
@@ -163,7 +159,7 @@ namespace ComicWPF.ViewModels
             LoadMediosDePago();
             LoadClientes();
             LoadEditorialesPorEmpleado();
-            //LoadEditorialesPorEmpleado(user.Id);
+
 
             Comic = new ComicModel();
 
@@ -176,7 +172,6 @@ namespace ComicWPF.ViewModels
 
             if (autores == null || !autores.Any())
             {
-                MessageBox.Show("No se encontraron autores .", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -193,24 +188,24 @@ namespace ComicWPF.ViewModels
         }
         public void LoadComic(int comicId)
         {
-            var comic = _comicRepository.obtenerComic(comicId);  // Obtener el cómic desde la base de datos
+            var comic = _comicRepository.obtenerComic(comicId);
 
             if (comic != null)
             {
-                // Asignar los valores a ComicModel
+    
                 Comic = new ComicModel
                 {
                     ComicId = comic.ComicId,
                     Nombre = comic.Nombre,
                     Autor = comic.Autor?.Nombre,
-                    AutorId = comic.Autor?.AutorId ?? 0,  // Asegúrate de que AutorId tiene un valor
+                    AutorId = comic.Autor?.AutorId ?? 0, 
                     Editorial = comic.Editorial?.Nombre,
-                    EditorialId = comic.Editorial?.EditorialId ?? 0  // Asegúrate de que EditorialId tiene un valor
+                    EditorialId = comic.Editorial?.EditorialId ?? 0 
                    
                 };
 
-                // Verificación de los valores para asegurarte de que se asignaron correctamente
-                MessageBox.Show($"Comic: {Comic.Nombre}, Autor: {Comic.AutorId}, Editorial: {Comic.EditorialId}");
+              
+                
             }
         }
 
@@ -218,21 +213,20 @@ namespace ComicWPF.ViewModels
 
         public void SaveComic()
         {
-            // Validar los campos
+ 
             if (string.IsNullOrEmpty(Comic.Nombre) || string.IsNullOrEmpty(Comic.Autor) || string.IsNullOrEmpty(Comic.Editorial))
             {
                 OperationMessage = "Todos los campos son obligatorios.";
                 return;
             }
 
-            // Lógica para insertar, modificar o eliminar comic
-            // Simulación de inserción
+ 
             OperationMessage = "Comic guardado correctamente.";
         }
 
         public void Cancel()
         {
-            // Resetear campos o cerrar el formulario
+ 
             OperationMessage = "Operación cancelada.";
         }
         public void ListarComicsEditorialyLocal(int editorialId, int localId)
@@ -266,7 +260,7 @@ namespace ComicWPF.ViewModels
                     sb.AppendLine($"ID: {comic.ComicId}, Nombre: {comic.Nombre}");
                 }
 
-                MessageBox.Show(sb.ToString(), "Cómics Encontrados", MessageBoxButton.OK, MessageBoxImage.Information);
+                
             }
             else
             {
