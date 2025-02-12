@@ -115,6 +115,25 @@ namespace ComicADO
             }
         }
 
+        public int? BuscarComicPorNombreYEditorial(string nombreComic, int editorialId)
+        {
+            using (var context = new ComicsContext())
+            {
+                try
+                {
+                    var comic = context.Comics
+                        .Where(c => c.Nombre == nombreComic && c.EditorialId == editorialId)
+                        .Select(c => c.ComicId)
+                        .FirstOrDefault();
+
+                    return comic == 0 ? (int?)null : comic;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error al buscar el cómic '{nombreComic}' en la editorial {editorialId}.", ex);
+                }
+            }
+        }
         public List<Comic> ListarComicsPorTiendaYEditorial(int tiendaId, int editorialId)
         {
             using (var context = new ComicsContext())

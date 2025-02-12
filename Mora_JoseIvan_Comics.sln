@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Comics", "Comics\Comics.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entidades", "Entidades\Entidades.csproj", "{44B6E974-5EA4-4CD7-BDA0-5794FB83D2F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComicWPF", "ComicWPF\ComicWPF.csproj", "{D94C73B2-6343-43AE-A264-EE0ADB51CA56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComicWPF", "ComicWPF\ComicWPF.csproj", "{D94C73B2-6343-43AE-A264-EE0ADB51CA56}"
+EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Mora_JoseIvan_Documentacion", "Mora_JoseIvan_Documentacion\Mora_JoseIvan_Documentacion.shfbproj", "{3B84030A-1E34-4688-BFBD-16560260C476}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{D94C73B2-6343-43AE-A264-EE0ADB51CA56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D94C73B2-6343-43AE-A264-EE0ADB51CA56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D94C73B2-6343-43AE-A264-EE0ADB51CA56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B84030A-1E34-4688-BFBD-16560260C476}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B84030A-1E34-4688-BFBD-16560260C476}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B84030A-1E34-4688-BFBD-16560260C476}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B84030A-1E34-4688-BFBD-16560260C476}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

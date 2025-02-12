@@ -115,6 +115,26 @@ namespace Ventas
             }
         }
 
+        public int? BuscarComicPorNombreYEditorial(string nombreComic, int editorialId)
+        {
+            using (ComicsADO comicADO = new ComicsADO())
+            {
+                try
+                {
+                    int? idComic = comicADO.BuscarComicPorNombreYEditorial(nombreComic, editorialId);
+
+                    return idComic;
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show($"Error al insertar el comic: {ex.Message}");
+                    return null;
+                }
+            }
+
+        }
+
         public void EditarUsuario(string nombre, string apellido, string password, string nif, string direccion, string hashPassword, string email, byte[] imagen, int idTienda, int empleadoIdActualizar)
         {
             using (EmpleadoADO empleadoADO = new EmpleadoADO())
@@ -246,49 +266,52 @@ namespace Ventas
             }
         }
 
-        public void EditarStockComic(int comicId, int editorial , int local , decimal precioCompra, int cantidad, int metodoPago, int emppleadoId)
+        public void EditarStockComic(int? comicId, int editorial , int local , decimal precioCompra, int cantidad, int metodoPago, int emppleadoId)
         {
             using (ComicsADO comicADO = new ComicsADO())
             {
                 try
-                {   
-                    
-
-                    // Insertar en StockComic
-                    using (StockComicADO stockComicADO = new StockComicADO())
+                {   if (comicId != null)
                     {
-                        var stockComic = stockComicADO.ListarPorComicYTienda(comicId,local);
-                        stockComic.Cantidad += cantidad;
-                        stockComicADO.Actualizar(stockComic);
-                    }
-                    using (OperacionADO operacionADO = new OperacionADO())
-                    {
-                        Operacion operacion = new Operacion()
-                        {
-                            MedioDePagoId = metodoPago,
-                            TipoOperacionId = 1,
-                            ComicId = comicId,
-                            LocalId = local,
-                            FechaOperacion = DateTime.Now,
-                            EmpleadoId = emppleadoId,
+                        int comicIdSeguro = comicId ?? 0;
 
-                        };
-                        Operacion operacionInsertada = operacionADO.Insertar(operacion);
-                        using (DetalleOperacionADO detalleOperacionADO = new DetalleOperacionADO())
+
+                        // Insertar en StockComic
+                        using (StockComicADO stockComicADO = new StockComicADO())
                         {
-                            DetalleOperacion detalleOperacion = new DetalleOperacion()
+                            var stockComic = stockComicADO.ListarPorComicYTienda(comicIdSeguro, local);
+                            stockComic.Cantidad += cantidad;
+                            stockComicADO.Actualizar(stockComic);
+                        }
+                        using (OperacionADO operacionADO = new OperacionADO())
+                        {
+                            Operacion operacion = new Operacion()
                             {
-                                OperacionId = operacionInsertada.OperacionId,
-                                ComicId = comicId,
-                                Cantidad = cantidad,
-                                Precio = precioCompra,
+                                MedioDePagoId = metodoPago,
+                                TipoOperacionId = 1,
+                                ComicId = comicIdSeguro,
+                                LocalId = local,
+                                FechaOperacion = DateTime.Now,
+                                EmpleadoId = emppleadoId,
 
                             };
-                            detalleOperacionADO.Insertar(detalleOperacion);
+                            Operacion operacionInsertada = operacionADO.Insertar(operacion);
+                            using (DetalleOperacionADO detalleOperacionADO = new DetalleOperacionADO())
+                            {
+                                DetalleOperacion detalleOperacion = new DetalleOperacion()
+                                {
+                                    OperacionId = operacionInsertada.OperacionId,
+                                    ComicId = comicIdSeguro,
+                                    Cantidad = cantidad,
+                                    Precio = precioCompra,
+
+                                };
+                                detalleOperacionADO.Insertar(detalleOperacion);
+                            }
                         }
-                    }
 
                         MessageBox.Show("Comic y stock insertados correctamente.");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -298,56 +321,59 @@ namespace Ventas
         }
 
         
-        public void EditarStockComic(int comicId, int editorial, int local, decimal precioCompra, int cantidad, int metodoPago, int emppleadoId, int clienteId)
+        public void EditarStockComic(int? comicId, int editorial, int local, decimal precioCompra, int cantidad, int metodoPago, int emppleadoId, int clienteId)
         {
             using (ComicsADO comicADO = new ComicsADO())
             {
                 try
                 {   // Insertar en StockComic
-
-                    using (StockComicADO stockComicADO = new StockComicADO())
+                    if (comicId != null)
                     {
-                        var stockComic = stockComicADO.ListarPorComicYTienda(comicId, local);
-                        stockComic.Cantidad += cantidad;
-                        stockComicADO.Actualizar(stockComic);
-                    }
-                    using (OperacionADO operacionADO = new OperacionADO())
-                    using (OperacionClienteJIMADO operacionCliente = new OperacionClienteJIMADO())
-                    {
-
-                        Operacion operacion = new Operacion()
+                        int comicIdSeguro = comicId ?? 0;
+                        using (StockComicADO stockComicADO = new StockComicADO())
                         {
-                            MedioDePagoId = metodoPago,
-                            TipoOperacionId = 1,
-                            ComicId = comicId,
-                            LocalId = local,
-                            FechaOperacion = DateTime.Now,
-                            EmpleadoId = emppleadoId,
-
-                        };
-                        Operacion operacionInsertada = operacionADO.Insertar(operacion);
-                        using (DetalleOperacionADO detalleOperacionADO = new DetalleOperacionADO())
-                        {
-                            DetalleOperacion detalleOperacion = new DetalleOperacion()
-                            {
-                                OperacionId = operacionInsertada.OperacionId,
-                                ComicId = comicId,
-                                Cantidad = cantidad,
-                                Precio = precioCompra,
-
-                            };
-                            detalleOperacionADO.Insertar(detalleOperacion);
-
-                            OperacionClienteJIM operacionCli = new OperacionClienteJIM
-                            {
-                                ClienteId = clienteId,
-                                OperacionId = operacionInsertada.OperacionId
-                            };
-                            OperacionClienteJIM operacion1 = operacionCliente.Insertar(operacionCli);
+                            var stockComic = stockComicADO.ListarPorComicYTienda(comicIdSeguro, local);
+                            stockComic.Cantidad += cantidad;
+                            stockComicADO.Actualizar(stockComic);
                         }
-                    }
+                        using (OperacionADO operacionADO = new OperacionADO())
+                        using (OperacionClienteJIMADO operacionCliente = new OperacionClienteJIMADO())
+                        {
 
-                    MessageBox.Show("Comic y stock insertados correctamente.");
+                            Operacion operacion = new Operacion()
+                            {
+                                MedioDePagoId = metodoPago,
+                                TipoOperacionId = 1,
+                                ComicId = comicIdSeguro,
+                                LocalId = local,
+                                FechaOperacion = DateTime.Now,
+                                EmpleadoId = emppleadoId,
+
+                            };
+                            Operacion operacionInsertada = operacionADO.Insertar(operacion);
+                            using (DetalleOperacionADO detalleOperacionADO = new DetalleOperacionADO())
+                            {
+                                DetalleOperacion detalleOperacion = new DetalleOperacion()
+                                {
+                                    OperacionId = operacionInsertada.OperacionId,
+                                    ComicId = comicIdSeguro,
+                                    Cantidad = cantidad,
+                                    Precio = precioCompra,
+
+                                };
+                                detalleOperacionADO.Insertar(detalleOperacion);
+
+                                OperacionClienteJIM operacionCli = new OperacionClienteJIM
+                                {
+                                    ClienteId = clienteId,
+                                    OperacionId = operacionInsertada.OperacionId
+                                };
+                                OperacionClienteJIM operacion1 = operacionCliente.Insertar(operacionCli);
+                            }
+                        }
+
+                        MessageBox.Show("Comic y stock insertados correctamente.");
+                    }
                 }
                 catch (Exception ex)
                 {

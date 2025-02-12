@@ -53,7 +53,7 @@ namespace ComicWPF.Repositories
         }
 
 
-        public void EditarStockComic(int editorial, int local, int metodoPago, int clienteId, int comicId,int empleadoId,int precioCompra,int cantidad, bool rbCliente)
+        public void EditarStockComic(int editorial, int local, int metodoPago, int clienteId, int? comicId,int empleadoId,int precioCompra,int cantidad, bool rbCliente)
         {
 
             try
@@ -225,6 +225,21 @@ namespace ComicWPF.Repositories
             }
         }
 
-        
+        public int? BuscarComicPorNombreYEditorial(string nombreComic, int editorialId)
+        {
+            using (VentasADO ventasADO = new VentasADO())
+            {
+                try
+                {
+                    int? idComic = ventasADO.BuscarComicPorNombreYEditorial(nombreComic, editorialId);
+                    return idComic;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al cargar los datos de cómics2: {ex.Message}");
+                    return null;
+                }
+            }
+        }
     }
 }

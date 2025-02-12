@@ -29,7 +29,8 @@ namespace ComicWPF.Models
         Task<List<ComicPageModel>> CargarComics();
         List<Comic> ListarComicsEditorialyLocal(int editorialId, int localId);
         Comic obtenerComic(int comicId);
-        void EditarStockComic(int editorial, int local, int metodoPago, int clienteId, int comicId, int empleadoId, int precioCompra, int cantidad, bool rbCliente);
+        void EditarStockComic(int editorial, int local, int metodoPago, int clienteId, int? comicId, int empleadoId, int precioCompra, int cantidad, bool rbCliente);
         void EditarComic(int comicId, string nombreComic, int editorialId, int autor);
+        int? BuscarComicPorNombreYEditorial(string comicNombre, int editorial);
     }
 }

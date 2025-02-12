@@ -7,6 +7,7 @@ using System;
 using System.ComponentModel;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
 using Ventas;
 
 namespace ComicWPF.ViewModels
@@ -91,6 +92,63 @@ namespace ComicWPF.ViewModels
             }
         }
 
+        private int _cantidad;
+        public int Cantidad
+        {
+            get { return _cantidad; }
+            set
+            {
+                _cantidad = value;
+                OnPropertyChanged(nameof(Cantidad)); 
+            }
+        }
+        private int _medioDePagoId;
+        public int MedioDePagoId
+        {
+            get { return _medioDePagoId; }
+            set
+            {
+                _medioDePagoId = value;
+                OnPropertyChanged(nameof(MedioDePagoId));
+            }
+        }
+
+        private int _precioCompra;
+        public int PrecioCompra
+        {
+            get { return _precioCompra; }
+            set
+            {
+                _precioCompra = value;
+                OnPropertyChanged(nameof(PrecioCompra));
+            }
+        }
+
+        private int _clienteID;
+        public int ClienteID
+        {
+            get { return _clienteID; }
+            set
+            {
+                _clienteID = value;
+                OnPropertyChanged(nameof(ClienteID));
+            }
+        }
+        private bool _esCompraCliente;
+        public bool EsCompraCliente
+        {
+            get { return _esCompraCliente; }
+            set
+            {
+                _esCompraCliente = value;
+                OnPropertyChanged(nameof(EsCompraCliente));
+            }
+        }
+
+        public ICommand GuardarCommand { get; }
+        public ICommand CancelarCommand { get; }
+        public ICommand ListarComicsCommand { get; }
+
         public ComicFormModel(IMedioDePagoRepository medioDePagoRepository,
                                    IClienteJIMRepository clienteJIMRepository,
                                    IEditorialRepository editorialRepository,
@@ -110,6 +168,7 @@ namespace ComicWPF.ViewModels
             //LoadEditorialesPorEmpleado(user.Id);
 
             Comic = new ComicModel();
+            GuardarCommand = new ViewModelCommand(ExecuteGuardarCommand);
         }
         public ComicFormModel(IMedioDePagoRepository medioDePagoRepository,
                                    IClienteJIMRepository clienteJIMRepository,
@@ -163,6 +222,29 @@ namespace ComicWPF.ViewModels
 
             Comic = new ComicModel();
 
+        }
+        private void ExecuteGuardarCommand(object parameter)
+        {
+            MessageBox.Show(Comic.Nombre);
+            string comicNombre = Comic.Nombre;
+            int cantidad = Cantidad;
+            int editorial = Comic.EditorialId;
+            int local = 1;
+            int metodoPago = MedioDePagoId;
+            int empleadoId = 1;
+            int precioCompra = PrecioCompra;
+            int clienteId = ClienteID;
+            bool rbCliente = EsCompraCliente;
+            int? idComic = _comicRepository.BuscarComicPorNombreYEditorial(comicNombre, editorial);
+            int? comicId = (idComic == null) ? null : idComic;
+            btnCreateComic_Click(editorial, local, metodoPago, clienteId, comicId, empleadoId, precioCompra, cantidad, rbCliente);
+            if (string.IsNullOrEmpty(Comic.Nombre))
+            {
+                OperationMessage = "El nombre del cómic es obligatorio.";
+                return;
+            }
+
+            OperationMessage = "Cómic guardado correctamente.";
         }
         public void LoadAutores()
         {
@@ -304,7 +386,7 @@ namespace ComicWPF.ViewModels
             }).ToList();
 
         }
-        public void btnCreateComic_Click(int editorial, int local, int metodoPago, int clienteId, int comicId,int empleadoId, int precioCompra, int cantidad, bool rbCliente)
+        public void btnCreateComic_Click(int editorial, int local, int metodoPago, int clienteId, int? comicId,int empleadoId, int precioCompra, int cantidad, bool rbCliente)
         {
 
 
