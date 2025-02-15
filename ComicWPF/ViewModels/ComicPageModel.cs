@@ -8,6 +8,7 @@ using Entidades;
 using System.Windows;
 using System.Windows.Controls;
 using ComicWPF.Views;
+using System.Windows.Input;
 
 namespace ComicWPF.ViewModels
 {
@@ -17,6 +18,27 @@ namespace ComicWPF.ViewModels
 
         private ObservableCollection<ComicModel> _comics;
         public ObservableCollection<ComicDisplayModel> Comics { get; set; }
+
+        private ComicDisplayModel _comicSeleccionado;
+        public ComicDisplayModel ComicSeleccionado
+        {
+            get { return _comicSeleccionado; }
+            set
+            {
+                if (_comicSeleccionado != value)
+                {
+                    _comicSeleccionado = value;
+                    OnPropertyChanged(nameof(ComicSeleccionado));
+
+ 
+                    if (_comicSeleccionado != null)
+                    {
+                        int localId = 1; 
+                        LoadComicDetails(_comicSeleccionado.ComicId, localId);
+                    }
+                }
+            }
+        }
 
 
         private ComicModel _selectedComic; 
@@ -28,7 +50,7 @@ namespace ComicWPF.ViewModels
                 if (_selectedComic != value)
                 {
                     _selectedComic = value;
-                    OnPropertyChanged(nameof(SelectedComic)); // Notificar cambios a la interfaz
+                    OnPropertyChanged(nameof(SelectedComic));
                 }
             }
         }
@@ -68,6 +90,8 @@ namespace ComicWPF.ViewModels
                 OnPropertyChanged(nameof(CurrentUserControl));
             }
         }
+        public ICommand InsertComicCommand { get; }
+        public ICommand DeleteComicCommand { get; }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -78,8 +102,35 @@ namespace ComicWPF.ViewModels
             Comics = new ObservableCollection<ComicDisplayModel>();
             StockOtrasTiendas = new ObservableCollection<StockComic>();
             CurrentUserControl = null;
+            InsertComicCommand = new ViewModelCommand(ExecuteInsertComicCommand);
+            DeleteComicCommand = new ViewModelCommand(DeleteComicCommandComicCommand);
             LoadComics();
         }
+        private void DeleteComicCommandComicCommand(object parameter)
+        {
+            int comidId = ComicSeleccionado.ComicId;
+            _comicRepository.DeleteComic(comidId);
+        }
+        private void ExecuteInsertComicCommand(object parameter)
+        {
+            ShowInsertForm();
+        }
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Obtener la referencia al DataGrid desde la UI
+            if (ComicSeleccionado != null)
+            {
+                int comicId = ComicSeleccionado.ComicId;
+
+                // Llamar al método ShowEditForm con el comicId seleccionado
+                ShowEditForm(comicId);
+            }
+            else
+            {
+                MessageBox.Show("Por favor, selecciona un cómic antes de editar.");
+            }
+        }
+
         public void ShowInsertForm()
         {
             var comicForm = new ComicForm(_comicRepository);

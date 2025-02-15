@@ -266,7 +266,77 @@ namespace Ventas
             }
         }
 
-        public void EditarStockComic(int? comicId, int editorial , int local , decimal precioCompra, int cantidad, int metodoPago, int emppleadoId)
+        public void BorrarComic(int comicId)
+        {
+            using (ComicsADO comicADO = new ComicsADO())
+            {
+                try
+                {
+                    string idComic = Convert.ToString(comicId);
+                    if (comicId <= 0)
+                    {
+                        throw new ArgumentException("ComicId debe ser un número válido.");
+                    }
+                    using (DetalleOperacionADO detalleOperacionADO = new DetalleOperacionADO())
+                    {
+                        detalleOperacionADO.EliminarDetallesPorComic(comicId);
+                        
+                    }
+
+                    using (OperacionClienteJIMADO operacionClienteADO = new OperacionClienteJIMADO())
+                    {
+
+                        using (OperacionADO operacionADO = new OperacionADO())
+                        {
+                            var operacionesRelacionadas = operacionADO.ListarPorComic(comicId);
+                            if (operacionesRelacionadas.Any())
+                            {
+                                foreach (var operacion in operacionesRelacionadas)
+                                {
+                                    operacionClienteADO.EliminarPorOperacion(operacion.OperacionId);
+                                    operacionADO.Borrar(operacion);
+                                }
+                            }
+                        }
+                    }
+                    using (StockComicADO stockComicADO = new StockComicADO())
+                    {
+                        var stockComics = stockComicADO.ListarporComic(idComic);
+                        if (stockComics != null)
+                        {
+                            stockComicADO.Borrar(stockComics);
+                        }
+                    }
+
+                    // 2️⃣ Eliminar registros en `DetalleOperacion`
+                    /*using (DetalleOperacionADO detalleOperacionADO = new DetalleOperacionADO())
+                    {
+                        var detallesOperacion = detalleOperacionADO.ListarPorComic(comicId);
+                        if (detallesOperacion.Any())
+                        {
+                            foreach (var detalle in detallesOperacion)
+                            {
+                                detalleOperacionADO.Borrar(detalle);
+                            }
+                        }
+                    }*/
+
+                    comicADO.Borrar(comicId);
+
+                    MessageBox.Show($"Cómic con ID {comicId} eliminado correctamente.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al eliminar el cómic (ID {comicId}): {ex.Message}\n\n{ex.StackTrace}");
+                }
+            }
+        }
+
+
+
+
+
+        public void EditarStockComic(int? comicId, int editorial , int local , decimal precioCompra, int cantidad, int metodoPago, int empleadoId, string comicNombre, int autor)
         {
             using (ComicsADO comicADO = new ComicsADO())
             {
@@ -292,7 +362,7 @@ namespace Ventas
                                 ComicId = comicIdSeguro,
                                 LocalId = local,
                                 FechaOperacion = DateTime.Now,
-                                EmpleadoId = emppleadoId,
+                                EmpleadoId = empleadoId,
 
                             };
                             Operacion operacionInsertada = operacionADO.Insertar(operacion);
@@ -311,6 +381,57 @@ namespace Ventas
                         }
 
                         MessageBox.Show("Comic y stock insertados correctamente.");
+                    }
+                    else
+                    {
+                        
+
+                            Comic comic = new Comic()
+                            {
+                                PrecioCompra = precioCompra,
+                                EditorialId = editorial,
+                                AutorId = autor,
+                                Nombre = comicNombre,
+                            };
+                        var comicInsertado = comicADO.Insertar(comic);
+                        // Insertar en StockComic
+                        using (StockComicADO stockComicADO = new StockComicADO())
+                        {
+                            StockComic stockComic = new StockComic()
+                            {
+                                ComicId = comicInsertado.ComicId,
+                                LocalId = local,
+                                Cantidad = cantidad,
+
+                            };
+                            stockComicADO.Insertar(stockComic);
+                        }
+                        using (OperacionADO operacionADO = new OperacionADO())
+                        {
+                            Operacion operacion = new Operacion()
+                            {
+                                MedioDePagoId = metodoPago,
+                                TipoOperacionId = 1,
+                                ComicId = comicInsertado.ComicId,
+                                LocalId = local,
+                                FechaOperacion = DateTime.Now,
+                                EmpleadoId = empleadoId,
+
+                            };
+                            Operacion operacionInsertada = operacionADO.Insertar(operacion);
+                            using (DetalleOperacionADO detalleOperacionADO = new DetalleOperacionADO())
+                            {
+                                DetalleOperacion detalleOperacion = new DetalleOperacion()
+                                {
+                                    OperacionId = operacionInsertada.OperacionId,
+                                    ComicId = comicInsertado.ComicId,
+                                    Cantidad = cantidad,
+                                    Precio = precioCompra,
+
+                                };
+                                detalleOperacionADO.Insertar(detalleOperacion);
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)

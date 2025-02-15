@@ -36,7 +36,7 @@
             <ComboBox x:Name="cmbAutores" Width="160" ItemsSource="{Binding Autores}" DisplayMemberPath="Nombre" SelectedValuePath="AutorId" SelectedValue="{Binding Comic.AutorId}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,5">
-            <Button Content="Listar Comics Editorial" Margin="25,0,0,0"  Width="132" Click="btnLoadComics_Click"/>
+            <Button Content="Listar Comics Editorial" Margin="25,0,0,0"  Width="132"   Command="{Binding ListarEditorialCommand}"/>
             <RadioButton x:Name="rcCliente"  Margin="25,0,0,0" Content="Compra cliente" Height="14" Width="120" IsChecked="{Binding EsCompraCliente, Mode=TwoWay}"/>
             <TextBlock Text="Cliente: " Width="50" Margin="10,0,0,0" VerticalAlignment="Center"/>
             <ComboBox x:Name="ClientNameTextBox" Width="182"  ItemsSource="{Binding ClientesList}" DisplayMemberPath="Nombre" SelectedValuePath="ClienteID" SelectedValue="{Binding ClienteID, Mode=TwoWay}" />
@@ -49,7 +49,7 @@
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="20">
             <Button Content="Guardar" Width="100" Command="{Binding GuardarCommand}"/>
-            <Button Content="Cancelar" Width="100" Margin="10,0" Click="CancelButton_Click"/>
+            <Button Content="Cancelar" Width="100" Margin="10,0" Command="{Binding CancellCommand}"/>
         </StackPanel>
     </StackPanel>
 </UserControl>

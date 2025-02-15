@@ -126,6 +126,7 @@ namespace ComicADO
             }
         }
 
+
         // Metodo para poner un cliente como inactivo
         public void Inactivo(ClienteJIM cliente)
         {

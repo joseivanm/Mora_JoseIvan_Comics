@@ -60,40 +60,14 @@ namespace ComicWPF.Views
         }
 
 
-        private void InsertButton_Click(object sender, RoutedEventArgs e)
-        {
-            var viewModel = (ComicPageModel)this.DataContext;
-            viewModel.ShowInsertForm();
-        }
 
 
 
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var selectedComicDisplay = (ComicDisplayModel)((DataGrid)sender).SelectedItem;
-            if (selectedComicDisplay != null)
-            {
-                var viewModel = (ComicPageModel)this.DataContext;
-                int localId = 1;
-            
-                viewModel.LoadComicDetails(selectedComicDisplay.ComicId, localId);
-            }
-        }
+
+        
 
 
 
-        private void EditButton_Click(object sender, RoutedEventArgs e)
-        {
-            var dataGrid = ComicsDataGrid;
-            var viewModel = (ComicPageModel)this.DataContext;
-            var selectedComicDisplay = (ComicDisplayModel)dataGrid.SelectedItem;
-            if (selectedComicDisplay != null)
-            {
-                int comicId = selectedComicDisplay.ComicId;
-                viewModel.ShowEditForm(comicId);  
-                
-            }
-        }
 
  
         private void DeleteButton_Click(object sender, RoutedEventArgs e)

@@ -54,67 +54,7 @@ namespace ComicWPF.Views
         }
 
 
-        private void btnLoadComics_Click(object sender, RoutedEventArgs e)
-        {
-            var model = (ComicFormModel)this.DataContext;
-            int editorialId = (int)cmbEditorial.SelectedValue;
-            int localId = 1; // TO-DO NEED CHANGE
 
-            model.ListarComicsEditorialyLocal(editorialId, localId);
-        }
-
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-            var user = userRepository.GetByUsername(Thread.CurrentPrincipal.Identity.Name);
-            if (!edicion)
-            {
-                var model = (ComicFormModel)this.DataContext;
-                int editorialId = (int)cmbEditorial.SelectedValue;
-                int metodoPago = (int)cmbMetodoPagoAdd.SelectedValue;
-                int clientId = (int)ClientNameTextBox.SelectedValue;
-                int localId = 1; // TO-DO NEED CHANGE
-                int empleadoId = Convert.ToInt32(user.Id);
-                int precioCompra = 0;
-                int cantidad = 0;
-                bool rbCliente = false;
-                rbCliente = rcCliente.IsChecked == true;
-                int comicId = Convert.ToInt32(ComicNameTextBox.SelectedValue);
-
-
-                if (int.TryParse(BuyPriceTextBox.Text, out precioCompra))
-                {
-
-                }
-                else
-                {
-                    MessageBox.Show("Por favor, ingresa un valor numérico válido para el precio de compra.");
-                }
-
-
-                if (int.TryParse(texboxCantidad.Text, out cantidad))
-                {
-                }
-                else
-                {
-                    MessageBox.Show("Por favor, ingresa un valor numérico válido para la cantidad.");
-                }
-
-
-
-                model.btnCreateComic_Click(editorialId, localId, metodoPago, clientId, comicId, empleadoId, precioCompra, cantidad, rbCliente);
-            }
-            else
-            {
-                var model = (ComicFormModel)this.DataContext;
-                int editorialId = (int)cmbEditorial.SelectedValue;
-                int autor = (int)cmbAutores.SelectedValue;
-                int comicId = Convert.ToInt32(ComicNameTextBox.SelectedValue);
-                string nombreComic = texboxCantidad.Text;
-
-                model.btnEditComic_Click(comicId, nombreComic, editorialId, autor);
-            }
-
-        }
 
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

@@ -200,7 +200,7 @@ namespace ComicWPF.ViewModels
             }).ToList();
 
         }
-        public void btnCreateComic_Click(int editorial, int local, int metodoPago, int clienteId, int comicId, int empleadoId, int precioCompra, int cantidad, bool rbCliente)
+        /*public void btnCreateComic_Click(int editorial, int local, int metodoPago, int clienteId, int comicId, int empleadoId, int precioCompra, int cantidad, bool rbCliente)
         {
 
 
@@ -215,7 +215,7 @@ namespace ComicWPF.ViewModels
                 MessageBox.Show($"Error al insertar el comic: {ex.Message}");
             }
 
-        }
+        }*/
 
 
         private void LoadMediosDePago()

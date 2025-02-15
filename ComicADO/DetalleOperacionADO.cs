@@ -16,6 +16,19 @@ namespace ComicADO
         {
             disposed = false;
         }
+        public void EliminarDetallesPorComic(int comicId)
+        {
+            using (var context = new ComicsContext())
+            {
+                var detalles = context.DetalleOperacions.Where(d => d.ComicId == comicId).ToList();
+
+                if (detalles.Any())
+                {
+                    context.DetalleOperacions.RemoveRange(detalles);
+                    context.SaveChanges();
+                }
+            }
+        }
 
         // Metodo para listar todos los detalles de operaciones en la base de datos
         public IList<DetalleOperacion> Listar()

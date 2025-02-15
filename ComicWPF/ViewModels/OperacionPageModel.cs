@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Input;
 using Ventas;
 using MessageBox = System.Windows.Forms.MessageBox;
 
@@ -18,8 +19,12 @@ namespace ComicWPF.ViewModels
         private readonly IEditorialRepository _editorialRepository;
         private readonly IComicRepository _comicRepository;
         private readonly IStockComicRepository _stockComicRepository;
+        public ICommand ListarEditorialCommand { get; }
+        public ICommand GuardarCommand { get; }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public ICommand AddComicCommand { get; }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 
         public List<EditorialModel> Editoriales { get; set; }
         public List<MedioDePago> MediosDePagoList { get; set; }
@@ -67,7 +72,56 @@ namespace ComicWPF.ViewModels
                 OnPropertyChanged(nameof(Total));
             }
         }
+        private int _medioDePagoId;
+        public int MedioDePagoId
+        {
+            get { return _medioDePagoId; }
+            set
+            {
+                if (_medioDePagoId != value)
+                {
+                    _medioDePagoId = value;
+                    OnPropertyChanged(nameof(MedioDePagoId));
+                    MessageBox.Show($"Medio de pago seleccionado: {_medioDePagoId}");
+                }
+            }
+        }
+        private MedioDePago _medioDePagoSeleccionado;
+        public MedioDePago MedioDePagoSeleccionado
+        {
+            get { return _medioDePagoSeleccionado; }
+            set
+            {
+                if (_medioDePagoSeleccionado != value)
+                {
+                    _medioDePagoSeleccionado = value;
+                    OnPropertyChanged(nameof(MedioDePagoSeleccionado));
 
+                }
+            }
+        }
+
+        private ClienteJimModel _cliente;
+        public ClienteJimModel Cliente
+        {
+            get { return _cliente; }
+            set
+            {
+                _cliente = value;
+                OnPropertyChanged(nameof(Cliente));
+            }
+        }
+
+        private ComicModel _comic;
+        public ComicModel Comic
+        {
+            get { return _comic; }
+            set
+            {
+                _comic = value;
+                OnPropertyChanged(nameof(Comic));
+            }
+        }
         private ObservableCollection<OperacionModel> _comicsOrder;
 
         public ObservableCollection<OperacionModel> ComicsOrder
@@ -77,6 +131,35 @@ namespace ComicWPF.ViewModels
             {
                 _comicsOrder = value;
                 OnPropertyChanged(nameof(ComicsOrder));
+            }
+        }
+        private OperacionModel _comicSeleccionado;
+        public OperacionModel ComicSeleccionado
+        {
+            get { return _comicSeleccionado; }
+            set
+            {
+                if (_comicSeleccionado != value)
+                {
+                    _comicSeleccionado = value;
+                    OnPropertyChanged(nameof(ComicSeleccionado));
+
+                }
+            }
+        }
+        private ComicModel _comicSelected;
+        public ComicModel ComicSelected
+        {
+            get { return _comicSelected; }
+            set
+            {
+                if (_comicSelected != value)
+                {
+                    _comicSelected = value;
+                    OnPropertyChanged(nameof(ComicSelected));
+                    MessageBox.Show($"Cómic seleccionado: {_comicSelected?.Nombre ?? "Ninguno"}");
+
+                }
             }
         }
 
@@ -97,38 +180,39 @@ namespace ComicWPF.ViewModels
             LoadMediosDePago();
             LoadClientes();
             LoadEditorialesPorEmpleado(user.Id);
+            Comic = new ComicModel();
+            ListarEditorialCommand = new ViewModelCommand(ExecuteListarEditorialCommand);
+            GuardarCommand = new ViewModelCommand(ExecuteGuardarCommand);
+            AddComicCommand = new ViewModelCommand(ExecuteAddComicCommand);
         }
-        public void AddComic(OperacionModel comicSelected)
+        public void AddComic()
         {
-            if (comicSelected == null)
+            if (ComicSeleccionado == null)
             {
                 MessageBox.Show("Por favor, selecciona un cómic.");
                 return;
             }
-
-            var comicDetalles = _comicRepository.obtenerComic(comicSelected.ComicId);
+            var comicDetalles = _comicRepository.obtenerComic(ComicSeleccionado.ComicId);
 
    
-            var stockComic = _stockComicRepository.ListarPorComicId(comicSelected.ComicId);
+            var stockComic = _stockComicRepository.ListarPorComicId(ComicSeleccionado.ComicId);
+            int cantidadActual = ComicsOrder
+            .Where(c => c.ComicId == ComicSeleccionado.ComicId)
+            .Sum(c => c.Cantidad);
 
-
-            if (stockComic == null || comicSelected.Cantidad > stockComic.Cantidad)
+            if (stockComic == null || ComicSeleccionado.Cantidad > stockComic.Cantidad)
             {
-                MessageBox.Show("No hay suficiente stock para agregar más unidades.");
-                return;
+               MessageBox.Show("No hay suficiente stock para agregar más unidades.");
+               return;
             }
 
-            if (comicSelected.Cantidad == 0)
-            {
-                comicSelected.Cantidad = 1;
-            }
 
             bool comicExists = false;
 
     
             foreach (var item in ComicsOrder)
             {
-                if (item.ComicId == comicSelected.ComicId)
+                if (item.ComicId == ComicSeleccionado.ComicId)
                 {
 
                     if (item.Cantidad + 1 > stockComic.Cantidad)
@@ -149,7 +233,7 @@ namespace ComicWPF.ViewModels
 
             if (!comicExists)
             {
-                if (comicSelected.Cantidad > stockComic.Cantidad)
+                if (1 > stockComic.Cantidad)
                 {
                     MessageBox.Show("No hay suficiente stock para agregar el cómic.");
                     return;
@@ -157,12 +241,12 @@ namespace ComicWPF.ViewModels
 
                 var newComic = new OperacionModel
                 {
-                    Nombre = comicSelected.Nombre,
-                    ComicId = comicSelected.ComicId,
-                    Cantidad = comicSelected.Cantidad,
-                    PrecioVenta = (decimal)comicDetalles.PrecioVenta,
-                    Subtotal = comicSelected.Cantidad * (decimal)comicDetalles.PrecioVenta,
-                    Stock = (int)stockComic.Cantidad
+                    Nombre = ComicSeleccionado.Nombre,
+                    ComicId = ComicSeleccionado.ComicId,
+                    Cantidad = 1,
+                    PrecioVenta = (decimal)comicDetalles.PrecioVenta!,
+                    Subtotal = 1 * (decimal)comicDetalles.PrecioVenta,
+                    Stock = (int)stockComic.Cantidad!
                 };
 
 
@@ -197,8 +281,38 @@ namespace ComicWPF.ViewModels
             OnPropertyChanged(nameof(Total));
         }
 
+        private void ExecuteListarEditorialCommand(object parameter)
+        {
+            int editorial = Comic.EditorialId;
+            int localId = 1;
+            ListarComicsEditorialyLocal(editorial, localId);
+        }
+        private void ExecuteAddComicCommand(object parameter)
+        {
+            AddComic();
+        }
+        private void ExecuteGuardarCommand(object parameter)
+        {
+            if (MedioDePagoSeleccionado == null || MedioDePagoSeleccionado.MedioDePagoId == 0)
+            {
+                MessageBox.Show("Por favor, selecciona un metodo de pago valido.");
+                return;
+            }
+
+            if (Cliente == null || Cliente.ClienteID == 0)
+            {
+                MessageBox.Show("Por favor, selecciona un cliente válido.");
+                return;
+            }
+
+            int medioPago = MedioDePagoSeleccionado.MedioDePagoId;
+            int localID = 1;
+            int empleadoId = 1;
+            int clienteId = Cliente.ClienteID;
 
 
+            Vender(medioPago, localID, clienteId, empleadoId);
+        }
 
 
 

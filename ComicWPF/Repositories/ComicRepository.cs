@@ -21,6 +21,23 @@ namespace ComicWPF.Repositories
             throw new NotImplementedException();
         }
 
+        public void DeleteComic(int comicId)
+        {
+            try
+            {
+                using (VentasADO ventasADO = new VentasADO())
+                {
+                    ventasADO.BorrarComic(comicId); 
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al insertar el comic: {ex.Message}");
+            }
+        }
+
         public List<Comic> ListarComicsEditorialyLocal(int editorialId, int localId)
         {
             using (VentasADO ventasADO = new VentasADO())
@@ -53,14 +70,14 @@ namespace ComicWPF.Repositories
         }
 
 
-        public void EditarStockComic(int editorial, int local, int metodoPago, int clienteId, int? comicId,int empleadoId,int precioCompra,int cantidad, bool rbCliente)
+        public void EditarStockComic(int editorial, int local, int metodoPago, int clienteId, int? comicId,int empleadoId,int precioCompra,int cantidad, bool rbCliente, string comicNombre, int autor)
         {
 
             try
             { 
                using (VentasADO ventasADO = new VentasADO())
                 {
-                    if (rbCliente) { ventasADO.EditarStockComic(comicId, editorial, local, precioCompra, cantidad, metodoPago, empleadoId); }
+                    if (rbCliente) { ventasADO.EditarStockComic(comicId, editorial, local, precioCompra, cantidad, metodoPago, empleadoId, comicNombre, autor); }
                     else { ventasADO.EditarStockComic(comicId, editorial, local, precioCompra, cantidad, metodoPago, empleadoId, clienteId); }
                 }
 

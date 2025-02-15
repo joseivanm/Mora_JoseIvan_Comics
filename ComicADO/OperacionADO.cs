@@ -110,6 +110,25 @@ namespace ComicADO
             }
         }
 
+        public List<Operacion> ListarPorComic(int comicId)
+        {
+            using (var context = new ComicsContext())
+            {
+                try
+                {
+                    var operaciones = context.Operacions
+                        .Where(o => o.ComicId == comicId)
+                        .ToList();
+
+                    return operaciones;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error al obtener las operaciones del cómic con ID {comicId}", ex);
+                }
+            }
+        }
+
 
 
 
@@ -341,23 +360,55 @@ namespace ComicADO
             {
                 try
                 {
-                    var operacionExistente = context.Operacions.FirstOrDefault(o => o.OperacionId == operacion.OperacionId);
-                    if (operacionExistente != null)
+                    if (operacion == null)
                     {
-                        context.Operacions.Remove(operacionExistente);
+                        throw new ArgumentNullException(nameof(operacion), "La operación proporcionada es nula.");
+                    }
+
+               
+                    var operacionExistente = context.Operacions.FirstOrDefault(o => o.OperacionId == operacion.OperacionId);
+
+                    if (operacionExistente == null)
+                    {
+                        throw new KeyNotFoundException($"La operación con ID {operacion.OperacionId} no existe en la base de datos.");
+                    }
+
+    
+                    var detallesOperacion = context.DetalleOperacions.Where(d => d.OperacionId == operacion.OperacionId).ToList();
+                    if (detallesOperacion.Any())
+                    {
+                        context.DetalleOperacions.RemoveRange(detallesOperacion);
                         context.SaveChanges();
                     }
-                    else
+
+                    
+                    context.Operacions.Remove(operacionExistente);
+                    int registrosAfectados = context.SaveChanges();
+
+                    if (registrosAfectados == 0)
                     {
-                        throw new Exception("La operacion no existe en la base de datos.");
+                        throw new Exception($"No se pudo eliminar la operación con ID {operacion.OperacionId}. No se afectaron filas.");
                     }
+                }
+                catch (ArgumentNullException ex)
+                {
+                    throw new Exception("Error: La operación es nula.", ex);
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    throw new Exception("Error: La operación no existe en la base de datos.", ex);
+                }
+                catch (DbUpdateException ex)
+                {
+                    throw new Exception($"Error al actualizar la base de datos al eliminar la operación (ID {operacion?.OperacionId}): {ex.Message}", ex);
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Error al eliminar la operacion", ex);
+                    throw new Exception($"Error inesperado al eliminar la operación con ID {operacion?.OperacionId}: {ex.Message}", ex);
                 }
             }
         }
+
 
         public void Dispose()
         {

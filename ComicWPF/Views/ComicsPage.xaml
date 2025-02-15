@@ -10,11 +10,20 @@
 
 
 
-        <DataGrid x:Name="ComicsDataGrid" IsReadOnly="True" 
-          ItemsSource="{Binding Comics}" 
-          SelectionChanged="DataGrid_SelectionChanged" Margin="0,64,171,394">
-
+        <DataGrid x:Name="ComicsDataGrid" IsReadOnly="True"
+          ItemsSource="{Binding Comics}"
+          SelectedItem="{Binding ComicSeleccionado, Mode=TwoWay}"
+          AutoGenerateColumns="False"
+          Margin="0,64,171,394">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="*"/>
+                <DataGridTextColumn Header="Autor" Binding="{Binding Autor}" Width="*"/>
+                <DataGridTextColumn Header="Editorial" Binding="{Binding Editorial}" Width="*"/>
+                <DataGridTextColumn Header="Precio Venta" Binding="{Binding PrecioVenta}" Width="*"/>
+            </DataGrid.Columns>
         </DataGrid>
+
+
 
 
         <StackPanel Margin="10,189,10,10">
@@ -76,9 +85,9 @@
 
             <!-- Botones de acción -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="20">
-                <Button Content="Nuevo" Width="100" Click="InsertButton_Click"/>
-                <Button Content="Modificar" Width="100" Margin="10,0" Click="EditButton_Click"/>
-                <Button Content="Eliminar" Width="100" Click="DeleteButton_Click"/>
+                <Button Content="Nuevo" Width="100" Command="{Binding InsertComicCommand}"/>
+                <Button Content="Modificar" Width="100" Margin="10,0" Command="{Binding EditComiclCommand}"/>
+                <Button Content="Eliminar" Width="100" Command="{Binding DeleteComicCommand}"/>
             </StackPanel>
         </StackPanel>
         <ContentControl Content="{Binding CurrentUserControl}" Margin="10,189,10,10" />

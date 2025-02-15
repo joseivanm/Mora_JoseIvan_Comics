@@ -34,7 +34,8 @@ namespace ComicWPF.Views
            MainContent.Content = new ComicsPage();
         }
         private void Operaciones_Click(object sender, RoutedEventArgs e) {
-            MainContent.Content = new OperacionPage();
+            OperacionPage ventana = new OperacionPage();
+            ventana.Show();
         }
         private void Stock_Click(object sender, RoutedEventArgs e) { }
         private void Clientes_Click(object sender, RoutedEventArgs e) {  }

@@ -76,6 +76,29 @@ namespace ComicADO
                 }
             }
         }
+        public StockComic ListarporComic(string ID)
+        {
+            using (var context = new ComicsContext())
+            {
+                try
+                {
+                    if (int.TryParse(ID, out int comicId)) 
+                    {
+                        var stockComic = context.StockComics.FirstOrDefault(s => s.ComicId == comicId);
+                        return stockComic;
+                    }
+                    else
+                    {
+                        throw new ArgumentException("El ID proporcionado no es válido.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al buscar el stock del cómic con el ID proporcionado.", ex);
+                }
+            }
+        }
+
 
         // Método para listar un stock de cómic por ComicId
         public StockComic ListarPorComicId(int comicId)
@@ -147,23 +170,48 @@ namespace ComicADO
             {
                 try
                 {
+                    if (stockComic == null)
+                    {
+                        throw new ArgumentNullException(nameof(stockComic), "El objeto stockComic no puede ser nulo.");
+                    }
+
+                    // Buscar si el stock realmente existe
                     var stockComicExistente = context.StockComics.FirstOrDefault(s => s.StockComicId == stockComic.StockComicId);
+
                     if (stockComicExistente != null)
                     {
                         context.StockComics.Remove(stockComicExistente);
-                        context.SaveChanges();
+                        int registrosAfectados = context.SaveChanges();
+
+                        if (registrosAfectados == 0)
+                        {
+                            throw new Exception("No se pudo eliminar el stock del cómic. La operación no afectó ninguna fila.");
+                        }
                     }
                     else
                     {
-                        throw new Exception("El stock de comic no existe en la base de datos.");
+                        throw new KeyNotFoundException($"El stock del cómic con ID {stockComic.StockComicId} no existe en la base de datos.");
                     }
+                }
+                catch (ArgumentNullException ex)
+                {
+                    throw new Exception("Error: Se intentó eliminar un stock nulo.", ex);
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    throw new Exception("Error: No se encontró el stock del cómic en la base de datos.", ex);
+                }
+                catch (DbUpdateException ex)
+                {
+                    throw new Exception("Error al actualizar la base de datos al eliminar el stock del cómic. Puede haber restricciones de claves foráneas.", ex);
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Error al eliminar el stock de comic", ex);
+                    throw new Exception("Error inesperado al eliminar el stock del cómic.", ex);
                 }
             }
         }
+
 
         // Método para listar las editoriales por tienda
         public List<Editorial> ListarEditorialesPorTienda(int tiendaId)

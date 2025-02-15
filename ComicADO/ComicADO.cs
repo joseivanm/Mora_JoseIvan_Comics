@@ -264,30 +264,53 @@ namespace ComicADO
             using (var context = new ComicsContext())
             {
                 try
-                {                    
+                {
                     if (comicId <= 0)
                     {
                         throw new ArgumentException("ComicId debe ser un número válido.");
                     }
-                    
+
+                    // Verificar si el cómic existe antes de intentar eliminarlo
                     var comicExistente = context.Comics.FirstOrDefault(c => c.ComicId == comicId);
-                    if (comicExistente != null)
+                    if (comicExistente == null)
                     {
-                        context.Comics.Remove(comicExistente); 
-                        context.SaveChanges(); 
+                        throw new KeyNotFoundException($"El cómic con ID {comicId} no existe en la base de datos.");
                     }
-                    else
+
+                    // Eliminar registros relacionados antes de eliminar el cómic
+                    context.StockComics.RemoveRange(context.StockComics.Where(s => s.ComicId == comicId));
+                    context.SaveChanges(); // Guardar cambios antes de eliminar el cómic
+
+                    // Ahora eliminar el cómic
+                    context.Comics.Remove(comicExistente);
+                    int registrosAfectados = context.SaveChanges();
+
+                    if (registrosAfectados == 0)
                     {
-                        throw new Exception($"El cómic con ID {comicId} no existe en la base de datos.");
+                        throw new Exception($"El cómic con ID {comicId} no pudo ser eliminado. No se afectaron filas.");
                     }
+
+                    MessageBox.Show($"Cómic con ID {comicId} eliminado correctamente.");
+                }
+                catch (DbUpdateException ex)
+                {
+                    string errorMessage = $"Error al actualizar la base de datos: {ex.Message}";
+
+                    if (ex.InnerException != null)
+                    {
+                        errorMessage += $"\n\nDetalle: {ex.InnerException.Message}";
+                    }
+
+                    MessageBox.Show(errorMessage);
                 }
                 catch (Exception ex)
                 {
-
-                    throw new Exception(comicId+ "Error al eliminar el comic", ex);
+                    MessageBox.Show($"Error inesperado al eliminar el cómic (ID {comicId}): {ex.Message}\n\n{ex.StackTrace}");
                 }
             }
         }
+
+
 
 
         public void Dispose()

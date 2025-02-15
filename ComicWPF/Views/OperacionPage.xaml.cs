@@ -15,7 +15,7 @@ namespace ComicWPF.Views
     /// <summary>
     /// Lógica de interacción para OperacionPage.xaml
     /// </summary>
-    public partial class OperacionPage : Page
+    public partial class OperacionPage : Window
     {
         int editorialId;
         private IUserRepository userRepository;
@@ -37,54 +37,7 @@ namespace ComicWPF.Views
 
             this.DataContext = new OperacionPageModel(medioDePagoRepository, clienteJIMRepository, editorialRepository, user, comicRepository, stockComicRepository);
         }
-
-        private void btnLoadComics_Click(object sender, RoutedEventArgs e)
-        {
-            var model = (OperacionPageModel)this.DataContext;
-            int editorialId = (int)cmbEditorial.SelectedValue; 
-            int localId = 1; // TO-DO NEED CHANGE
-
-            model.ListarComicsEditorialyLocal(editorialId, localId);
-        }
-
-        private void btnAddComic_Click(object sender, RoutedEventArgs e)
-        {
-
-            var comicSelected = (OperacionModel)cmbComics.SelectedItem;
-
-            if (comicSelected != null)
-            {
-   
-                var model = (OperacionPageModel)this.DataContext;
-                model.AddComic(comicSelected);
-            }
-            else
-            {
-                MessageBox.Show("Por favor, selecciona un cómic.");
-            }
-        }
-
-        private void buttonVenta_Click(object sender, RoutedEventArgs e)
-        {
-            if (cmbMetodoPago.SelectedValue == null)
-            {
-                MessageBox.Show("Por favor, selecciona un método de pago.");
-                return;
-            }
-            if (cmbClientes.SelectedValue == null)
-            {
-                MessageBox.Show("Por favor, selecciona un cliente.");
-                return;
-            }
-
-            int medioPago = ((MedioDePago)cmbMetodoPago.SelectedValue).MedioDePagoId;
-            int localID = 1;
-            int empleadoId = 1;
-            int clienteId = ((ClienteJimModel)cmbClientes.SelectedValue).ClienteID;
-
-            var model = (OperacionPageModel)this.DataContext;
-            model.Vender(medioPago, localID, clienteId, empleadoId);
-        }
+        
     }
 
 }
